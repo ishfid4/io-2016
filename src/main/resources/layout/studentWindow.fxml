@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io2016.Controllers.StudentPreferencesController">
+   <top>
+      <Label text="Prosze wybrac swoje preferencje" BorderPane.alignment="CENTER" />
+   </top>
+   <bottom>
+      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveClicked" text="Zapisz preferencje" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Poniedzialek" />
+                  <ListView fx:id="moListView" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Wtorek" />
+                  <ListView fx:id="tuListView" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Sroda" />
+                  <ListView fx:id="weListView" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Czwarterk" />
+                  <ListView fx:id="thListView" />
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Piatek" />
+                  <ListView fx:id="frListView" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </center>
+</BorderPane>
