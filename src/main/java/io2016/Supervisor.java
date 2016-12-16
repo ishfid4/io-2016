@@ -1,24 +1,19 @@
 package io2016;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
  * Created by ishfi on 14.12.2016.
  */
 public class Supervisor {
-    //private int groupId = 1; //TODO: need to obtain from db (after login?) IS IT NEEDED?
-    private int userId = 6; //TODO: need to obtain from db (after login?)
-    private boolean student; //TODO: need to obtain from db (after login?)
+    private int userId;
+    private boolean student;
 
     private ObservableList<String> roomsList;
     private ArrayList<ObservableList<Integer>> hoursPreferences;
@@ -50,9 +45,10 @@ public class Supervisor {
         callback.accept(verifiedCredentials.getValue());
     }
 
-    // TODO: It needs to get rooms from db
-    public ObservableList<String> getRoomsList() {
-        roomsList = FXCollections.observableArrayList("200", "100", "010", "010", "301");
+    public ObservableList<String> getRoomsList() throws SQLException {
+        DataAccessLayer dataAccessLayer = new DataAccessLayer();
+        roomsList = dataAccessLayer.obtainRoomsFromDB();
+
         return roomsList;
     }
 

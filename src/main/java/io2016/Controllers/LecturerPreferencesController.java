@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -66,10 +65,10 @@ public class LecturerPreferencesController {
 
     }
 
-    public void setSupervisor(Supervisor supervisor) {
+    public void setSupervisor(Supervisor supervisor) throws SQLException {
         this.supervisor = supervisor;
 
-        // TODO: this shouldnt be here
+        // TODO: consider whether this should be here?
         //filling room list with data
         roomList = supervisor.getRoomsList();
         roomListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

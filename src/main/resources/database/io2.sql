@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Czas generowania: 15 Gru 2016, 01:28
+-- Czas generowania: 16 Gru 2016, 16:17
 -- Wersja serwera: 10.1.19-MariaDB
 -- Wersja PHP: 7.0.13
 
@@ -68,7 +68,14 @@ INSERT INTO `preferred_hours_lecturers` (`id`, `lecturer_id`, `day_id`, `hour_id
 (8, 2, 4, 5),
 (9, 2, 4, 11),
 (10, 2, 5, 4),
-(11, 2, 5, 9);
+(11, 2, 5, 9),
+(12, 1, 1, 4),
+(13, 1, 1, 5),
+(14, 1, 1, 6),
+(15, 1, 1, 7),
+(16, 1, 1, 8),
+(17, 1, 1, 9),
+(18, 2, 1, 8);
 
 -- --------------------------------------------------------
 
@@ -113,7 +120,20 @@ INSERT INTO `preferred_hours_students` (`id`, `user_id`, `day_id`, `hour_id`) VA
 (23, 2, 2, 8),
 (24, 2, 3, 5),
 (25, 2, 4, 10),
-(26, 2, 5, 8);
+(26, 2, 5, 8),
+(27, 6, 1, 9),
+(28, 6, 2, 8),
+(29, 6, 2, 9),
+(30, 6, 2, 10),
+(31, 6, 2, 11),
+(32, 6, 3, 9),
+(33, 6, 4, 10),
+(34, 6, 5, 4),
+(35, 6, 5, 10),
+(36, 2, 5, 6),
+(37, 2, 5, 7),
+(38, 2, 5, 8),
+(39, 2, 5, 9);
 
 -- --------------------------------------------------------
 
@@ -134,7 +154,47 @@ CREATE TABLE `preferred_rooms` (
 INSERT INTO `preferred_rooms` (`id`, `room_number`, `lecturer_id`) VALUES
 (1, 103, 1),
 (2, 203, 2),
-(3, 10, 2);
+(3, 10, 2),
+(4, 100, 1),
+(5, 10, 1),
+(6, 10, 1),
+(7, 401, 2),
+(8, 10, 2),
+(9, 501, 2),
+(10, 24, 2),
+(11, 12, 2),
+(12, 103, 1),
+(13, 102, 1),
+(14, 501, 1),
+(15, 24, 1),
+(16, 12, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `room`
+--
+
+CREATE TABLE `room` (
+  `id` int(11) NOT NULL,
+  `room_number` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Zrzut danych tabeli `room`
+--
+
+INSERT INTO `room` (`id`, `room_number`) VALUES
+(1, 103),
+(2, 102),
+(3, 201),
+(4, 302),
+(5, 401),
+(6, 10),
+(7, 501),
+(8, 24),
+(9, 12),
+(10, 1);
 
 -- --------------------------------------------------------
 
@@ -190,6 +250,12 @@ ALTER TABLE `preferred_rooms`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `room`
+--
+ALTER TABLE `room`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
@@ -208,17 +274,22 @@ ALTER TABLE `lecturers`
 -- AUTO_INCREMENT dla tabeli `preferred_hours_lecturers`
 --
 ALTER TABLE `preferred_hours_lecturers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT dla tabeli `preferred_hours_students`
 --
 ALTER TABLE `preferred_hours_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT dla tabeli `preferred_rooms`
 --
 ALTER TABLE `preferred_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT dla tabeli `room`
+--
+ALTER TABLE `room`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT dla tabeli `students`
 --

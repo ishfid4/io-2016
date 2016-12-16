@@ -6,8 +6,6 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Created by ishfi on 14.12.2016.
@@ -36,6 +34,15 @@ public class DataAccessLayer {
         verifiedCredentials = internalDB.checkUserCredentials(index,lastname,student);
 
         return verifiedCredentials;
+    }
+
+    public ObservableList<String> obtainRoomsFromDB() throws SQLException {
+        ObservableList<String> roomList;
+        InternalDB internalDB = new InternalDB();
+
+        roomList = internalDB.getRoomList();
+
+        return roomList;
     }
 
     //TODO: crap in this function should be in another class (spaghetti)

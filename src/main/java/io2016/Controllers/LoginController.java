@@ -1,6 +1,5 @@
 package io2016.Controllers;
 
-import io2016.DataAccessLayer;
 import io2016.Supervisor;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,7 +26,7 @@ public class LoginController {
     @FXML
     public void loginClicked() throws SQLException {
         supervisor.setStudent(!lecturerCheck.isSelected());
-
+        // TODO: repair error when indexTextField is not filled and when it contain sth dofferent from digits!!
         supervisor.login(indexTextField.getText(), lastnameTextField.getText(), this::loggedIn);
     }
 
@@ -57,7 +56,7 @@ public class LoginController {
                     //TODO: eliminate nullptr exception
                     stage.setScene(scene);
                     stage.show();
-                } catch (IOException e) {
+                } catch (IOException | SQLException e) {
                     e.printStackTrace();
                 }
             });

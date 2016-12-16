@@ -2,15 +2,15 @@ package io2016;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.management.BufferPoolMXBean;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.StringJoiner;
+import java.util.List;
 
 /**
  * Created by ishfi on 14.12.2016.
@@ -55,7 +55,8 @@ public class InternalDB {
     }
 
     private void addStudentPreferences(int studentId, int dayId, int hourId) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO `preferred_hours_students` (`user_id`, `day_id`, `hour_id`) VALUES (?,?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
+                "`preferred_hours_students` (`user_id`, `day_id`, `hour_id`) VALUES (?,?,?)");
         preparedStatement.setInt(1,studentId);
         preparedStatement.setInt(2,dayId);
         preparedStatement.setInt(3,hourId);
@@ -63,7 +64,8 @@ public class InternalDB {
     }
 
     private void addLecturerPreferences(int lecturerId, int dayId, int hourId) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO `preferred_hours_lecturers` (`lecturer_id`, `day_id`, `hour_id`) VALUES (?,?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
+                "`preferred_hours_lecturers` (`lecturer_id`, `day_id`, `hour_id`) VALUES (?,?,?)");
         preparedStatement.setInt(1,lecturerId);
         preparedStatement.setInt(2,dayId);
         preparedStatement.setInt(3,hourId);
@@ -71,7 +73,8 @@ public class InternalDB {
     }
 
     private void addRoomPreferences(int lecturerId, int roomNumber) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO `preferred_rooms`(`room_number`, `lecturer_id`) VALUES (?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
+                "`preferred_rooms`(`room_number`, `lecturer_id`) VALUES (?,?)");
         preparedStatement.setInt(1,roomNumber);
         preparedStatement.setInt(2,lecturerId);
         preparedStatement.executeUpdate();
@@ -119,6 +122,23 @@ public class InternalDB {
         return new Pair<Integer,Boolean>(userId,success);
     }
 
+    public ObservableList<String> getRoomList() throws SQLException {
+        List<String> list = new ArrayList<String>();
+        ObservableList<String> roomList = FXCollections.observableList(list);
+        Statement statement = connection.createStatement();
+
+        try (ResultSet resultSet = statement.executeQuery("SELECT `room_number` FROM `room`")) {
+            while (resultSet.next()) {
+               roomList.add(String.valueOf(resultSet.getInt(1)));
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return roomList;
+    }
 
 //    public ResultSet selectAggregatedLecturer() throws SQLException {
 //        Statement statement = connection.createStatement();
