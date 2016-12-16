@@ -3,9 +3,11 @@ package io2016;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import javafx.collections.ObservableList;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.management.BufferPoolMXBean;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.StringJoiner;
@@ -73,6 +75,48 @@ public class InternalDB {
         preparedStatement.setInt(1,roomNumber);
         preparedStatement.setInt(2,lecturerId);
         preparedStatement.executeUpdate();
+    }
+
+
+    public Pair<Integer,Boolean> checkUserCredentials(String index, String lastname, Boolean student) throws SQLException {
+        Boolean success = false;
+        int userId = 0;
+        Statement statement = connection.createStatement();
+
+        if (student){
+            try (ResultSet resultSet = statement.executeQuery("SELECT `id`, `lastname` FROM `students`")) {
+                while (resultSet.next()) {
+                    userId = resultSet.getInt(1);
+                    if ((Integer.parseInt(index) == userId)
+                            && (lastname.equals(resultSet.getString(2)))){
+                       success = true;
+                       break;
+                    }
+                }
+            } catch (SQLException ex) {
+                // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+            }
+        }else{
+            try (ResultSet resultSet = statement.executeQuery("SELECT `id`, `lastname` FROM `lecturers`")) {
+                while (resultSet.next()) {
+                    userId = resultSet.getInt(1);
+                    if ((Integer.parseInt(index) == userId)
+                            && (lastname.equals(resultSet.getString(2)))){
+                        success = true;
+                        break;
+                    }
+                }
+            } catch (SQLException ex) {
+                // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+            }
+        }
+        return new Pair<Integer,Boolean>(userId,success);
     }
 
 

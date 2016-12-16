@@ -1,36 +1,37 @@
 package io2016.Controllers;
 
+import io2016.DataAccessLayer;
 import io2016.Supervisor;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Created by ishfi on 14.12.2016.
  */
 public class LoginController {
-    @FXML private TextField loginTextField;
-    @FXML private PasswordField passwordField;
+    @FXML private TextField indexTextField;
+    @FXML private TextField lastnameTextField;
     @FXML private Label loginLabelStatus;
     @FXML private Button buttonSignIn;
+    @FXML private CheckBox lecturerCheck;
     private Supervisor supervisor;
 
     @FXML
-    public void loginClicked(){
-        // TODO: boolean student should be taken? from db
-        loggedIn(true, supervisor.isStudent());
+    public void loginClicked() throws SQLException {
+        supervisor.setStudent(!lecturerCheck.isSelected());
+
+        supervisor.login(indexTextField.getText(), lastnameTextField.getText(), this::loggedIn);
     }
 
-    private void loggedIn(Boolean success, Boolean student){
+    private void loggedIn(Boolean success){
         if(success){
             Platform.runLater(() -> {
                 Stage stage = (Stage)buttonSignIn.getScene().getWindow();
@@ -38,7 +39,7 @@ public class LoginController {
                 Parent root = null;
 
                 try {
-                    if (student){
+                    if (supervisor.isStudent()){
                         loader = new FXMLLoader(getClass().getResource("/layout/studentWindow.fxml"));
                         root = loader.load();
 

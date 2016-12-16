@@ -1,17 +1,21 @@
 package io2016;
 
 import javafx.collections.ObservableList;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Created by ishfi on 14.12.2016.
  */
 public class DataAccessLayer {
 
-    public void savePreferencesToDB(ArrayList<ObservableList<Integer>> hoursPreferences, ObservableList<String> roomsPreferences, int userId) throws SQLException {
+    public void savePreferencesToDB(ArrayList<ObservableList<Integer>> hoursPreferences,
+                                    ObservableList<String> roomsPreferences, int userId) throws SQLException {
         InternalDB internalDB = new InternalDB();
         ArrayList<ArrayList<Integer>> preferredHours = convertPreferetHours(hoursPreferences);
 
@@ -23,6 +27,15 @@ public class DataAccessLayer {
         ArrayList<ArrayList<Integer>> preferredHours = convertPreferetHours(hoursPreferences);
 
         internalDB.addStudentsPreferences(preferredHours, userId);
+    }
+
+    public Pair<Integer, Boolean> verifyLoginCredentials(String index, String lastname, Boolean student) throws SQLException {
+        Pair<Integer, Boolean> verifiedCredentials;
+        InternalDB internalDB = new InternalDB();
+
+        verifiedCredentials = internalDB.checkUserCredentials(index,lastname,student);
+
+        return verifiedCredentials;
     }
 
     //TODO: crap in this function should be in another class (spaghetti)

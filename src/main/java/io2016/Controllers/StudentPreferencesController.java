@@ -61,7 +61,7 @@ public class StudentPreferencesController {
         preferredHours.add(frListView.getSelectionModel().getSelectedIndices());
 
         supervisor.setHoursPreferences(preferredHours);
-        supervisor.save();
+        supervisor.save(); //TODO: add some sort of popup if or sth if successfully saved
     }
 
     public void setSupervisor(Supervisor supervisor) {

@@ -62,7 +62,7 @@ public class LecturerPreferencesController {
         supervisor.setRoomsPreferences(prederedRooms);
         supervisor.setHoursPreferences(preferredHours);
 
-        supervisor.save();
+        supervisor.save();  //TODO: add some sort of popup if or sth if successfully saved
 
     }
 
