@@ -32,7 +32,6 @@ public class LoginController {
 
     private void loggedIn(Boolean success){
         if(success){
-            Platform.runLater(() -> {
                 Stage stage = (Stage)buttonSignIn.getScene().getWindow();
                 FXMLLoader loader;
                 Parent root = null;
@@ -53,15 +52,13 @@ public class LoginController {
                     }
 
                     Scene scene = new Scene(root);
-                    //TODO: eliminate nullptr exception
                     stage.setScene(scene);
                     stage.show();
                 } catch (IOException | SQLException e) {
                     e.printStackTrace();
                 }
-            });
         }else{
-            Platform.runLater(() -> loginLabelStatus.setText("Nie poprawne dane logowania"));
+            Platform.runLater(() -> loginLabelStatus.setText("Niepoprawne dane logowania"));
         }
     }
 
