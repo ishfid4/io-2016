@@ -11,17 +11,22 @@ import java.util.ArrayList;
  * Created by ishfi on 14.12.2016.
  */
 public class DataAccessLayer {
+    private InternalDB internalDB;
+    private JsonOutput jsonOutput;
+
+    public DataAccessLayer() {
+        this.internalDB = new InternalDB();
+        this.jsonOutput = new JsonOutput();
+    }
 
     public void savePreferencesToDB(ArrayList<ObservableList<Integer>> hoursPreferences,
                                     ObservableList<String> roomsPreferences, int userId) throws SQLException {
-        InternalDB internalDB = new InternalDB();
         ArrayList<ArrayList<Integer>> preferredHours = convertPreferetHours(hoursPreferences);
 
         internalDB.addLecturersPreferences(preferredHours, roomsPreferences, userId);
     }
 
     public void savePreferencesToDB(ArrayList<ObservableList<Integer>> hoursPreferences, int userId) throws SQLException {
-        InternalDB internalDB = new InternalDB();
         ArrayList<ArrayList<Integer>> preferredHours = convertPreferetHours(hoursPreferences);
 
         internalDB.addStudentsPreferences(preferredHours, userId);
@@ -29,7 +34,6 @@ public class DataAccessLayer {
 
     public Pair<Integer, Boolean> verifyLoginCredentials(String index, String lastname, Boolean student) throws SQLException {
         Pair<Integer, Boolean> verifiedCredentials;
-        InternalDB internalDB = new InternalDB();
 
         verifiedCredentials = internalDB.checkUserCredentials(index,lastname,student);
 
@@ -38,22 +42,24 @@ public class DataAccessLayer {
 
     public ObservableList<String> obtainRoomsFromDB() throws SQLException {
         ObservableList<String> roomList;
-        InternalDB internalDB = new InternalDB();
 
         roomList = internalDB.getRoomList();
 
         return roomList;
     }
 
-    //TODO: crap in this function should be in another class (spaghetti)
     public void saveToJsonFile() throws IOException, SQLException {
-      //  JsonOutput jsonOutput = new JsonOutput();
-        InternalDB internalDB = new InternalDB();
-       // jsonOutput.saveAggregatedLecturer(internalDB.selectAggregatedLecturer());
-        internalDB.selectAggregatedLecturer();
-        internalDB.selectAggregatedRooms();
-        internalDB.selectAggregatedStudents();
+        ArrayList<LecturerPreferences> lecturersPreferences = new ArrayList<LecturerPreferences>();
+        ArrayList<GroupPreferences> groupsPreferences = new ArrayList<GroupPreferences>();
 
+        groupsPreferences = internalDB.selectAggregatedStudents();
+        jsonOutput.saveAggregatedStudentsPreferrations(groupsPreferences);
+
+        lecturersPreferences = internalDB.selectAggregatedLecturer();
+        jsonOutput.saveAggregatedLecturerPreferrences(lecturersPreferences);
+
+        internalDB.selectAggregatedRooms(lecturersPreferences);
+        jsonOutput.saveAggregatedRoomPreferrences(lecturersPreferences);
     }
 
     //TODO: Why?

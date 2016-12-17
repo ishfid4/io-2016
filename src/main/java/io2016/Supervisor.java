@@ -52,7 +52,6 @@ public class Supervisor {
         return roomsList;
     }
 
-    // TODO: this should handle also gen json
     public void save() throws SQLException, IOException {
         DataAccessLayer dataAccessLayer = new DataAccessLayer();
         if(student){

@@ -1,13 +1,10 @@
 package io2016;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,135 +137,99 @@ public class InternalDB {
         return roomList;
     }
 
-//    public ResultSet selectAggregatedLecturer() throws SQLException {
-//        Statement statement = connection.createStatement();
-//
-//        try (ResultSet rs = statement.executeQuery(
-//                "SELECT day_id, hour_id, lecturer_id, count(lecturer_id)" +
-//                        " as count FROM lecturers JOIN preferred_hours_lecturers ON" +
-//                        " lecturers.id = preferred_hours_lecturers.lecturer_id " +
-//                        "GROUP BY day_id, hour_id")) {
-//            return rs;
-//        }
-//    }
-
-
-//    --------------------------P L S ----- D O N T---------------------------------------------------------------------
-    //TODO: WTF this is crap, part (saving to file) of this should be in other class
-    public void selectAggregatedStudents() throws SQLException, IOException {
-        PrintWriter printWriter = null;
-        printWriter = new PrintWriter("studentHoursPreferences.json");
-
+    //--------------------------------For Json------------------------------
+    public  ArrayList<GroupPreferences> selectAggregatedStudents() throws SQLException, IOException {
         Statement statement = connection.createStatement();
-        JsonFactory jfactory = new JsonFactory();
-        JsonGenerator jGenerator = jfactory.createGenerator(printWriter);
-        jGenerator.writeStartArray();
+        ArrayList<GroupPreferences> groupsPreferences = new ArrayList<>();
 
-        try (ResultSet rs = statement.executeQuery(
-                "SELECT day_id, hour_id, group_id, count(user_id) as count " +
+        try (ResultSet resultSet = statement.executeQuery(
+                "SELECT group_id, day_id, hour_id, count(user_id) as count " +
                         "FROM students JOIN preferred_hours_students " +
                         "ON students.id = preferred_hours_students.user_id " +
-                        "GROUP BY day_id, hour_id, group_id")) {
+                        "GROUP BY group_id, day_id, hour_id")) {
 
-            //przeglądnięcie obiektu typu ResultSet element po elemencie
-            while (rs.next()) {
-                //Wybranie pierwszej kolumny w postaci Stringa
-                jGenerator.writeStartObject();
+            while (resultSet.next()) {
+                int groupIndex = -1;
 
-                jGenerator.writeFieldName("day_id");
-                jGenerator.writeString(rs.getString(1));
+                if (groupsPreferences.size() == 0){
+                    groupsPreferences.add(new GroupPreferences(resultSet.getInt(1)));
+                    groupIndex = groupsPreferences.size() - 1;
+                }else{
+                    for (int i = 0; i < groupsPreferences.size(); ++i){
+                        if (groupsPreferences.get(i).getGroupId() == resultSet.getInt(1)){
+                            groupIndex = i;
+                        }
+                    }
+                    if (groupIndex == -1){
+                        groupsPreferences.add(new GroupPreferences(resultSet.getInt(1)));
+                        groupIndex = groupsPreferences.size() - 1;
+                    }
+                }
 
-                jGenerator.writeFieldName("hour_id");
-                jGenerator.writeNumber(rs.getInt(2));
-
-                jGenerator.writeFieldName("group_id");
-                jGenerator.writeNumber(rs.getInt(3));
-
-                jGenerator.writeFieldName("count");
-                jGenerator.writeNumber(rs.getInt(4));
-
-                jGenerator.writeEndObject();
+                groupsPreferences.get(groupIndex).getPreferredHoursInSpecifiedDay().put(new Pair<Integer,Integer>
+                                (resultSet.getInt(2), resultSet.getInt(3))
+                            , resultSet.getInt(4));
             }
-
-            jGenerator.writeEndArray();
-            jGenerator.flush();
         }
-        jGenerator.writeStartArray();
+        return groupsPreferences;
     }
 
-    public void selectAggregatedLecturer() throws SQLException, IOException {
+    public ArrayList<LecturerPreferences> selectAggregatedLecturer() throws SQLException, IOException {
         Statement statement = connection.createStatement();
-        PrintWriter printWriter = null;
-        printWriter = new PrintWriter("lecturerHoursPreferences.json");
+        ArrayList<LecturerPreferences> lecturersPreferences = new ArrayList<>();
 
-        JsonFactory jfactory = new JsonFactory();
-        JsonGenerator jGenerator = jfactory.createGenerator(printWriter);
-        jGenerator.writeStartArray();
+        try (ResultSet resultSet = statement.executeQuery(
+                "SELECT lecturer_id, day_id, hour_id, count(lecturer_id) as count FROM lecturers " +
+                        "JOIN preferred_hours_lecturers ON lecturers.id = preferred_hours_lecturers.lecturer_id " +
+                        "GROUP BY lecturer_id, day_id, hour_id")){
+            while (resultSet.next()) {
+                int groupIndex = -1;
 
-        try (ResultSet rs = statement.executeQuery(
-                "SELECT day_id, hour_id, lecturer_id, count(lecturer_id)" +
-                        " as count FROM lecturers JOIN preferred_hours_lecturers ON" +
-                        " lecturers.id = preferred_hours_lecturers.lecturer_id " +
-                        "GROUP BY day_id, hour_id")){
-            //przeglądnięcie obiektu typu ResultSet element po elemencie
-            while (rs.next()) {
-                //Wybranie pierwszej kolumny w postaci Stringa
-                jGenerator.writeStartObject();
+                if (lecturersPreferences.size() == 0){
+                    lecturersPreferences.add(new LecturerPreferences(resultSet.getInt(1)));
+                    groupIndex = lecturersPreferences.size() - 1;
+                }else{
+                    for (int i = 0; i < lecturersPreferences.size(); ++i){
+                        if (lecturersPreferences.get(i).getLecturerId() == resultSet.getInt(1)){
+                            groupIndex = i;
+                        }
+                    }
+                    if (groupIndex == -1){
+                        lecturersPreferences.add(new LecturerPreferences(resultSet.getInt(1)));
+                        groupIndex = lecturersPreferences.size() - 1;
+                    }
+                }
 
-                jGenerator.writeFieldName("day_id");
-                jGenerator.writeString(rs.getString(1));
-
-                jGenerator.writeFieldName("hour_id");
-                jGenerator.writeNumber(rs.getInt(2));
-
-                jGenerator.writeFieldName("lecturer_id");
-                jGenerator.writeNumber(rs.getInt(3));
-
-                jGenerator.writeFieldName("count");
-                jGenerator.writeNumber(rs.getInt(4));
-
-                jGenerator.writeEndObject();
+                lecturersPreferences.get(groupIndex).getPreferredHoursInSpecifiedDay().put(new Pair<Integer,Integer>
+                                (resultSet.getInt(2), resultSet.getInt(3))
+                        , resultSet.getInt(4));
             }
-
-            jGenerator.writeEndArray();
-            jGenerator.flush();
-
-            jGenerator.writeStartArray();
         }
-
+        return lecturersPreferences;
     }
 
-
-
-    public void selectAggregatedRooms() throws SQLException, IOException {
-        PrintWriter printWriter = null;
-        printWriter = new PrintWriter("roomPreferences.json");
-
+    public void selectAggregatedRooms(ArrayList<LecturerPreferences> lecturersPreferences) throws SQLException, IOException {
         Statement statement = connection.createStatement();
-        JsonFactory jfactory = new JsonFactory();
-        JsonGenerator jGenerator = jfactory.createGenerator(printWriter);
-        jGenerator.writeStartArray();
 
-        try (ResultSet rs = statement.executeQuery(
-                "SELECT `room_number`, `lecturer_id` FROM `preferred_rooms`")) {
-            //przeglądnięcie obiektu typu ResultSet element po elemencie
-            while (rs.next()) {
-                //Wybranie pierwszej kolumny w postaci Stringa
-                jGenerator.writeStartObject();
+        try (ResultSet resultSet = statement.executeQuery(
+                "SELECT `lecturer_id`, `room_number` FROM `preferred_rooms` ORDER BY `lecturer_id` ASC")) {
+            while (resultSet.next()) {
+                int index = -1;
+                for (int i = 0; i < lecturersPreferences.size(); ++i){
+                    if (lecturersPreferences.get(i).getLecturerId() == resultSet.getInt(1)){
+                        index = i;
+                        break;
+                    }
+                }
 
-                jGenerator.writeFieldName("room_number");
-                jGenerator.writeString(rs.getString(1));
+                if (index == -1){
+                    lecturersPreferences.add(new LecturerPreferences(resultSet.getInt(1)));
+                    index = lecturersPreferences.size() - 1;
+                }
 
-                jGenerator.writeFieldName("lecturer_id");
-                jGenerator.writeNumber(rs.getInt(2));
-
-                jGenerator.writeEndObject();
+                lecturersPreferences.get(index).getRoomList().add(resultSet.getInt(2));
             }
-
-            jGenerator.writeEndArray();
-            jGenerator.flush();
         }
-        jGenerator.writeStartArray();
     }
 
 }
