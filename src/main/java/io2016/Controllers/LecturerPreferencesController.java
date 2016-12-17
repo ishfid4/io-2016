@@ -48,6 +48,7 @@ public class LecturerPreferencesController {
 
     @FXML
     private void saveClicked() throws IOException, SQLException {
+        //TODO: add sth to prevent multiple saves (one click = add records to db and generate output files)
         ObservableList<String> prederedRooms = null;
         prederedRooms = roomListView.getSelectionModel().getSelectedItems();
 

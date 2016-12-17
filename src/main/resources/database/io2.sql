@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Czas generowania: 16 Gru 2016, 16:17
+-- Czas generowania: 17 Gru 2016, 15:07
 -- Wersja serwera: 10.1.19-MariaDB
 -- Wersja PHP: 7.0.13
 
@@ -75,7 +75,21 @@ INSERT INTO `preferred_hours_lecturers` (`id`, `lecturer_id`, `day_id`, `hour_id
 (15, 1, 1, 7),
 (16, 1, 1, 8),
 (17, 1, 1, 9),
-(18, 2, 1, 8);
+(18, 2, 1, 8),
+(19, 1, 1, 6),
+(20, 1, 1, 8),
+(21, 1, 1, 11),
+(22, 1, 2, 8),
+(23, 1, 3, 11),
+(24, 1, 4, 4),
+(25, 1, 4, 11),
+(26, 1, 5, 4),
+(27, 1, 5, 12),
+(28, 2, 1, 10),
+(29, 2, 2, 7),
+(30, 2, 3, 11),
+(31, 2, 4, 7),
+(32, 2, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -133,7 +147,14 @@ INSERT INTO `preferred_hours_students` (`id`, `user_id`, `day_id`, `hour_id`) VA
 (36, 2, 5, 6),
 (37, 2, 5, 7),
 (38, 2, 5, 8),
-(39, 2, 5, 9);
+(39, 2, 5, 9),
+(40, 2, 1, 8),
+(41, 2, 1, 12),
+(42, 2, 2, 6),
+(43, 2, 3, 8),
+(44, 2, 4, 5),
+(45, 2, 4, 11),
+(46, 2, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -167,7 +188,12 @@ INSERT INTO `preferred_rooms` (`id`, `room_number`, `lecturer_id`) VALUES
 (13, 102, 1),
 (14, 501, 1),
 (15, 24, 1),
-(16, 12, 1);
+(16, 12, 1),
+(17, 10, 1),
+(18, 12, 1),
+(19, 10, 2),
+(20, 24, 2),
+(21, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -274,17 +300,17 @@ ALTER TABLE `lecturers`
 -- AUTO_INCREMENT dla tabeli `preferred_hours_lecturers`
 --
 ALTER TABLE `preferred_hours_lecturers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT dla tabeli `preferred_hours_students`
 --
 ALTER TABLE `preferred_hours_students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT dla tabeli `preferred_rooms`
 --
 ALTER TABLE `preferred_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT dla tabeli `room`
 --

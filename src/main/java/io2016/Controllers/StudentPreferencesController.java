@@ -32,6 +32,7 @@ public class StudentPreferencesController {
     @FXML private Button saveButton;
     private Supervisor supervisor;
 
+    //This should not be hard coded, probably
     private ObservableList<String> hourSections = FXCollections.observableArrayList(
             "8:00 -> 9:00","9:00 -> 10:00","10:00 -> 11:00","11:00 -> 12:00","12:00 -> 13:00",
             "13:00 -> 14:00","14:00 -> 15:00","15:00 -> 16:00","16:00 -> 17:00",
@@ -53,6 +54,7 @@ public class StudentPreferencesController {
 
     @FXML
     private void saveClicked() throws IOException, SQLException {
+        //TODO: add sth to prevent multiple saves (one click = add records to db and generate output files)
         ArrayList<ObservableList<Integer>> preferredHours = new ArrayList<>();
         preferredHours.add(moListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(tuListView.getSelectionModel().getSelectedIndices());
