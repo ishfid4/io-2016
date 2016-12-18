@@ -9,10 +9,7 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ishfi on 15.12.2016.
@@ -31,11 +28,11 @@ public class JsonOutput {
             HashMap<Pair<Integer, Integer>, Integer> preferdHours;
             preferdHours = groupPreferences.getPreferredHoursInSpecifiedDay();
 
-            Iterator iterator = preferdHours.entrySet().iterator();
+            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferdHours.entrySet().iterator();
             while (iterator.hasNext()) {
                 jGenerator.writeStartObject();
 
-                HashMap.Entry<Pair<Integer, Integer>, Integer> entry = (HashMap.Entry<Pair<Integer, Integer>, Integer>) iterator.next();
+                HashMap.Entry<Pair<Integer, Integer>, Integer> entry = iterator.next();
 
                 jGenerator.writeFieldName("group_id");
                 jGenerator.writeNumber(groupPreferences.getGroupId());
@@ -68,11 +65,11 @@ public class JsonOutput {
             HashMap<Pair<Integer, Integer>, Integer> preferdHours;
             preferdHours = lecturerPreferences.getPreferredHoursInSpecifiedDay();
 
-            Iterator iterator = preferdHours.entrySet().iterator();
+            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferdHours.entrySet().iterator();
             while (iterator.hasNext()) {
                 jGenerator.writeStartObject();
 
-                HashMap.Entry<Pair<Integer, Integer>, Integer> entry = (HashMap.Entry<Pair<Integer, Integer>, Integer>) iterator.next();
+                HashMap.Entry<Pair<Integer, Integer>, Integer> entry = iterator.next();
 
                 jGenerator.writeFieldName("lecturer_id");
                 jGenerator.writeNumber(lecturerPreferences.getLecturerId());
