@@ -1,4 +1,4 @@
-package io2016.customJavafx;
+package io2016.controls;
 
 import javafx.scene.control.TextField;
 

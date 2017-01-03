@@ -6,10 +6,10 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by ishfi on 15.12.2016.
@@ -25,10 +25,10 @@ public class JsonOutput {
         jGenerator.writeStartArray();
 
         for (GroupPreferences groupPreferences : groupsPreferences) {
-            HashMap<Pair<Integer, Integer>, Integer> preferdHours;
-            preferdHours = groupPreferences.getPreferredHoursInSpecifiedDay();
+            HashMap<Pair<Integer, Integer>, Integer> preferrdHours;
+            preferrdHours = groupPreferences.getPreferredHoursInSpecifiedDay();
 
-            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferdHours.entrySet().iterator();
+            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferrdHours.entrySet().iterator();
             while (iterator.hasNext()) {
                 jGenerator.writeStartObject();
 
@@ -62,10 +62,10 @@ public class JsonOutput {
         jGenerator.writeStartArray();
 
         for (LecturerPreferences lecturerPreferences : lecturersPreferences) {
-            HashMap<Pair<Integer, Integer>, Integer> preferdHours;
-            preferdHours = lecturerPreferences.getPreferredHoursInSpecifiedDay();
+            HashMap<Pair<Integer, Integer>, Integer> preferredHours;
+            preferredHours = lecturerPreferences.getPreferredHoursInSpecifiedDay();
 
-            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferdHours.entrySet().iterator();
+            Iterator<Map.Entry<Pair<Integer, Integer>, Integer>> iterator = preferredHours.entrySet().iterator();
             while (iterator.hasNext()) {
                 jGenerator.writeStartObject();
 
