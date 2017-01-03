@@ -8,11 +8,8 @@
    <top>
       <Label text="Prosze wybrac swoje preferencje" BorderPane.alignment="CENTER" />
    </top>
-   <bottom>
-      <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveClicked" text="Zapisz preferencje" BorderPane.alignment="CENTER" />
-   </bottom>
    <center>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox fx:id="preferencesBox" BorderPane.alignment="CENTER">
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -47,4 +44,12 @@
          </children>
       </HBox>
    </center>
+   <bottom>
+      <HBox spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveClicked" text="Zapisz preferencje" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutClicked" text="Wyloguj" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

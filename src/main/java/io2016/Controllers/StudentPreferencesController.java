@@ -6,6 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
@@ -14,6 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,6 +35,8 @@ public class StudentPreferencesController {
     @FXML private ListView<String> thListView;
     @FXML private ListView<String> frListView;
     @FXML private Button saveButton;
+    @FXML private Button logoutButton;
+    @FXML private HBox preferencesBox;
     private Supervisor supervisor;
 
     //This should not be hard coded, probably
@@ -51,16 +58,39 @@ public class StudentPreferencesController {
         frListView.setItems(hourSections);
     }
 
+    @FXML
+    private void logoutClicked() throws IOException {
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        FXMLLoader loader;
+        Parent root = null;
+
+        loader = new FXMLLoader(getClass().getResource("/layout/loginWindow.fxml"));
+        try {
+            root = loader.load();
+
+            LoginController controller = loader.getController();
+            controller.setSupervisor(supervisor);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void saveClicked() throws IOException, SQLException {
-        //TODO: add sth to prevent multiple saves (one click = add records to db and generate output files)
         ArrayList<ObservableList<Integer>> preferredHours = new ArrayList<>();
         preferredHours.add(moListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(tuListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(weListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(thListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(frListView.getSelectionModel().getSelectedIndices());
+
+        //Disabling further edition of preferences and saving them in this session
+        saveButton.setDisable(true);
+        preferencesBox.setDisable(true);
 
         supervisor.setHoursPreferences(preferredHours);
         supervisor.save(); //TODO: add some sort of popup if or sth if successfully saved

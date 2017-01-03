@@ -1,12 +1,18 @@
 package io2016.Controllers;
 
 import io2016.Supervisor;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,6 +29,8 @@ public class LecturerPreferencesController {
     @FXML private ListView<String> frListView;
     @FXML private ListView<String> roomListView;
     @FXML private Button saveButton;
+    @FXML private Button logoutButton;
+    @FXML private HBox preferencesBox;
     private Supervisor supervisor;
 
     //This should not be hard coded, probably
@@ -45,10 +53,29 @@ public class LecturerPreferencesController {
         frListView.setItems(hourSections);
     }
 
+    @FXML
+    private void logoutClicked()  {
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        FXMLLoader loader;
+        Parent root = null;
+
+        loader = new FXMLLoader(getClass().getResource("/layout/loginWindow.fxml"));
+        try {
+            root = loader.load();
+
+            LoginController controller = loader.getController();
+            controller.setSupervisor(supervisor);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void saveClicked() throws IOException, SQLException {
-        //TODO: add sth to prevent multiple saves (one click = add records to db and generate output files)
         ObservableList<String> prederedRooms = null;
         prederedRooms = roomListView.getSelectionModel().getSelectedItems();
 
@@ -61,6 +88,10 @@ public class LecturerPreferencesController {
 
         supervisor.setRoomsPreferences(prederedRooms);
         supervisor.setHoursPreferences(preferredHours);
+
+        //Disabling further edition of preferences and saving them in this session
+        saveButton.setDisable(true);
+        preferencesBox.setDisable(true);
 
         supervisor.save();  //TODO: add some sort of popup if or sth if successfully saved
 
