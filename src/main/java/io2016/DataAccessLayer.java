@@ -48,6 +48,15 @@ public class DataAccessLayer {
         return roomList;
     }
 
+    public void removeAllUserPreferences(int userId, Boolean student) throws SQLException {
+        if (student){
+            internalDB.removeAllStudentPreferencesRecords(userId);
+        }else{
+            internalDB.removeAllLecturerPreferencesRecords(userId);
+            internalDB.removeAllLecturerRoomsPreferencesRecords(userId);
+        }
+    }
+
     public void saveToJsonFile() throws IOException, SQLException {
         ArrayList<LecturerPreferences> lecturersPreferences = new ArrayList<LecturerPreferences>();
         ArrayList<GroupPreferences> groupsPreferences = new ArrayList<GroupPreferences>();

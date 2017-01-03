@@ -36,7 +36,17 @@ public class LoginController {
                 FXMLLoader loader;
                 Parent root = null;
 
-                try {
+            //Removing previous preferences if they exist
+            try {
+                supervisor.removePreviousUserPreferences();
+            } catch (SQLException ex) {
+                //handle errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+            }
+
+            try {
                     if (supervisor.isStudent()){
                         loader = new FXMLLoader(getClass().getResource("/layout/studentWindow.fxml"));
                         root = loader.load();

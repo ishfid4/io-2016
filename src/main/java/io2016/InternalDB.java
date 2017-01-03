@@ -77,6 +77,26 @@ public class InternalDB {
         preparedStatement.executeUpdate();
     }
 
+    public void removeAllStudentPreferencesRecords(int studentId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `preferred_hours_students` " +
+                "WHERE `user_id`=(?)");
+        preparedStatement.setInt(1,studentId);
+        preparedStatement.executeUpdate();
+    }
+
+    public void removeAllLecturerRoomsPreferencesRecords(int lecturerId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `preferred_rooms` " +
+                "WHERE `lecturer_id`=(?)");
+        preparedStatement.setInt(1,lecturerId);
+        preparedStatement.executeUpdate();
+    }
+
+    public void removeAllLecturerPreferencesRecords(int lecturerId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM `preferred_hours_lecturers` " +
+                "WHERE `lecturer_id`=(?)");
+        preparedStatement.setInt(1,lecturerId);
+        preparedStatement.executeUpdate();
+    }
 
     public Pair<Integer,Boolean> checkUserCredentials(String index, String lastname, Boolean student) throws SQLException {
         Boolean success = false;

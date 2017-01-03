@@ -52,6 +52,11 @@ public class Supervisor {
         return roomsList;
     }
 
+    public void removePreviousUserPreferences() throws SQLException {
+        DataAccessLayer dataAccessLayer = new DataAccessLayer();
+        dataAccessLayer.removeAllUserPreferences(userId,student);
+    }
+
     public void save() throws SQLException, IOException {
         DataAccessLayer dataAccessLayer = new DataAccessLayer();
         if(student){
