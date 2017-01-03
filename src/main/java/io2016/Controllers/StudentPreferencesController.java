@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +19,8 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -80,7 +79,7 @@ public class StudentPreferencesController {
     }
 
     @FXML
-    private void saveClicked() throws IOException, SQLException {
+    private void saveClicked() {
         ArrayList<ObservableList<Integer>> preferredHours = new ArrayList<>();
         preferredHours.add(moListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(tuListView.getSelectionModel().getSelectedIndices());
@@ -88,12 +87,30 @@ public class StudentPreferencesController {
         preferredHours.add(thListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(frListView.getSelectionModel().getSelectedIndices());
 
-        //Disabling further edition of preferences and saving them in this session
-        saveButton.setDisable(true);
-        preferencesBox.setDisable(true);
-
         supervisor.setHoursPreferences(preferredHours);
-        supervisor.save(); //TODO: add some sort of popup if or sth if successfully saved
+        try{
+            supervisor.save();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Poprawnie zapisano preferencje godzin!");
+            alert.showAndWait();
+
+            //Disabling further edition of preferences and saving them in this session
+            saveButton.setDisable(true);
+            preferencesBox.setDisable(true);
+        } catch (SQLException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Exception Dialog");
+
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String exceptionText = sw.toString();
+
+            Label label = new Label("The exception stacktrace was:");
+            TextArea textArea = new TextArea(exceptionText);
+        }
     }
 
     public void setSupervisor(Supervisor supervisor) {

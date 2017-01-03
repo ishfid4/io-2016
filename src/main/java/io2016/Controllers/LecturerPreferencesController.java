@@ -8,13 +8,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -88,12 +88,30 @@ public class LecturerPreferencesController {
 
         supervisor.setRoomsPreferences(prederedRooms);
         supervisor.setHoursPreferences(preferredHours);
+        try{
+            supervisor.save();
 
-        //Disabling further edition of preferences and saving them in this session
-        saveButton.setDisable(true);
-        preferencesBox.setDisable(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Poprawnie zapisano preferencje godzin oraz sal!");
+            alert.showAndWait();
 
-        supervisor.save();  //TODO: add some sort of popup if or sth if successfully saved
+            //Disabling further edition of preferences and saving them in this session
+            saveButton.setDisable(true);
+            preferencesBox.setDisable(true);
+
+        } catch (SQLException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Exception Dialog");
+
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String exceptionText = sw.toString();
+
+            Label label = new Label("The exception stacktrace was:");
+            TextArea textArea = new TextArea(exceptionText);
+        }
 
     }
 
