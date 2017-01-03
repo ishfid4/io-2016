@@ -2,6 +2,8 @@ package io2016.Controllers;
 
 import io2016.Supervisor;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,15 +28,21 @@ public class LoginController {
     @FXML
     public void loginClicked() throws SQLException {
         supervisor.setStudent(!lecturerCheck.isSelected());
-        // TODO: repair error when indexTextField is not filled and when it contain sth dofferent from digits!!
-        supervisor.login(indexTextField.getText(), lastnameTextField.getText(), this::loggedIn);
+
+        if (indexTextField.getText().isEmpty()){
+            Platform.runLater(() -> loginLabelStatus.setText("Prosze wprowadzic numer indeksu"));
+        }else if (lastnameTextField.getText().isEmpty()){
+            Platform.runLater(() -> loginLabelStatus.setText("Prosze wprowadzic swoje nazwisko"));
+        }else{
+            supervisor.login(indexTextField.getText(), lastnameTextField.getText(), this::loggedIn);
+        }
     }
 
     private void loggedIn(Boolean success){
         if(success){
-                Stage stage = (Stage)buttonSignIn.getScene().getWindow();
-                FXMLLoader loader;
-                Parent root = null;
+            Stage stage = (Stage)buttonSignIn.getScene().getWindow();
+            FXMLLoader loader;
+            Parent root = null;
 
             //Removing previous preferences if they exist
             try {

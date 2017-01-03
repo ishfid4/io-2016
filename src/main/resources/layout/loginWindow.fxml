@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import io2016.customJavafx.*?>
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io2016.Controllers.LoginController">
     <columnConstraints>
@@ -29,11 +30,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="indexTextField" GridPane.columnIndex="1">
+                <NumberTextField fx:id="indexTextField" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets right="20.0" />
                     </GridPane.margin>
-                </TextField>
+                </NumberTextField>
                 <Label alignment="CENTER_RIGHT" text="Nr indeksu:" />
                 <Label text="Nazwisko:" GridPane.rowIndex="1" />
                 <Button fx:id="buttonSignIn" mnemonicParsing="false" onAction="#loginClicked" onMouseClicked="#loginClicked" text="Zaloguj" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
