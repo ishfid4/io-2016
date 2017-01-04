@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.HBox;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ public class LecturerPreferencesController extends PreferencesController {
     @FXML private HBox preferencesBox;
 
     private ObservableList<String> roomList = FXCollections.observableArrayList();
+    private ArrayList<String> previousPreferredRooms = new ArrayList<>();
 
     @FXML
     private void saveClicked() {
@@ -81,9 +83,28 @@ public class LecturerPreferencesController extends PreferencesController {
         this.supervisor = supervisor;
 
         // TODO: consider whether this should be here?
+        setUpRoomsView();
+        setUpDaysViewWithPreviousPreferedHours();
+    }
+
+    private void setUpRoomsView() throws SQLException {
         //filling room list with data
         roomList = supervisor.getRoomsList();
         roomListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         roomListView.setItems(roomList);
+
+        //Setting previous preferences if they exist
+        previousPreferredRooms = supervisor.getPreviousPreferedRooms();
+
+        if (previousPreferredRooms.size() != 0){
+            for (String preferedRoom: previousPreferredRooms) {
+                for(int i = 0; i < roomList.size(); ++i){
+                    if (preferedRoom.equals(roomList.get(i))){
+                        roomListView.getSelectionModel().select(i);
+                    }
+                }
+            }
+        }
     }
+
 }

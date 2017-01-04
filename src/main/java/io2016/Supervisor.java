@@ -15,6 +15,7 @@ public class Supervisor {
     private int userId;
     private boolean student;
 
+    private DataAccessLayer dataAccessLayer = new DataAccessLayer();
     private ObservableList<String> roomsList;
     private ArrayList<ObservableList<Integer>> hoursPreferences;
     private ObservableList<String> roomsPreferences;
@@ -37,8 +38,6 @@ public class Supervisor {
 
     public void login(String index, String lastname,  Consumer<Boolean> callback) throws SQLException {
         Pair<Integer, Boolean> verifiedCredentials;
-
-        DataAccessLayer dataAccessLayer = new DataAccessLayer();
         verifiedCredentials = dataAccessLayer.verifyLoginCredentials(index, lastname, student);
 
         userId = verifiedCredentials.getKey();
@@ -46,19 +45,24 @@ public class Supervisor {
     }
 
     public ObservableList<String> getRoomsList() throws SQLException {
-        DataAccessLayer dataAccessLayer = new DataAccessLayer();
         roomsList = dataAccessLayer.obtainRoomsFromDB();
 
         return roomsList;
     }
 
+    public ArrayList<Pair<Integer,Integer>> getPreviousPreferedHours() throws SQLException {
+        return dataAccessLayer.getPreferedHoursFromDB(userId,student);
+    }
+
+    public ArrayList<String> getPreviousPreferedRooms() throws SQLException {
+        return dataAccessLayer.getPreferedRoomsFromDB(userId);
+    }
+
     public void removePreviousUserPreferences() throws SQLException {
-        DataAccessLayer dataAccessLayer = new DataAccessLayer();
         dataAccessLayer.removeAllUserPreferences(userId,student);
     }
 
     public void save() throws SQLException, IOException {
-        DataAccessLayer dataAccessLayer = new DataAccessLayer();
         if(student){
             dataAccessLayer.savePreferencesToDB(hoursPreferences,userId);
         }else{

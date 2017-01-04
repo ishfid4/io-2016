@@ -9,10 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by ishfi on 03.01.2017.
@@ -31,6 +34,7 @@ public class PreferencesController {
             "8:00 -> 9:00","9:00 -> 10:00","10:00 -> 11:00","11:00 -> 12:00","12:00 -> 13:00",
             "13:00 -> 14:00","14:00 -> 15:00","15:00 -> 16:00","16:00 -> 17:00",
             "17:00 -> 18:00","18:00 -> 19:00","19:00 -> 20:00","20:00 -> 21:00");
+    private ArrayList<Pair<Integer,Integer>> previousPreferedHours = new ArrayList<>();
 
     public void initialize() {
         moListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -77,5 +81,31 @@ public class PreferencesController {
 
         Label label = new Label("The exception stacktrace was:");
         TextArea textArea = new TextArea(exceptionText);
+    }
+
+    protected void setUpDaysViewWithPreviousPreferedHours() throws SQLException {
+        previousPreferedHours = supervisor.getPreviousPreferedHours();
+
+        if (previousPreferedHours.size() != 0){
+            for (Pair<Integer,Integer> dayHour: previousPreferedHours) {
+                switch (dayHour.getKey()){
+                    case 1:
+                        moListView.getSelectionModel().select(dayHour.getValue()-1);
+                        break;
+                    case 2:
+                        tuListView.getSelectionModel().select(dayHour.getValue()-1);
+                        break;
+                    case 3:
+                        weListView.getSelectionModel().select(dayHour.getValue()-1);
+                        break;
+                    case 4:
+                        thListView.getSelectionModel().select(dayHour.getValue()-1);
+                        break;
+                    case 5:
+                        frListView.getSelectionModel().select(dayHour.getValue()-1);
+                        break;
+                }
+            }
+        }
     }
 }

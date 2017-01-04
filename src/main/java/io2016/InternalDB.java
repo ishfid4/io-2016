@@ -1,5 +1,6 @@
 package io2016;
 
+import io2016.Controllers.PreferencesController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -30,7 +31,7 @@ public class InternalDB {
         for (int i = 0; i < preferredHours.size(); ++i){
             for (int j = 0; j < preferredHours.get(i).size(); ++j){
                 if (preferredHours.get(i).get(j) != 0){
-                    addStudentPreferences(studentId, i+1, preferredHours.get(i).get(j)+1);
+                    addStudentPreferences(studentId, i+1, preferredHours.get(i).get(j));
                 }
             }
         }
@@ -41,7 +42,7 @@ public class InternalDB {
         for (int i = 0; i < preferredHours.size(); ++i){
             for (int j = 0; j < preferredHours.get(i).size(); ++j){
                 if (preferredHours.get(i).get(j) != 0){
-                    addLecturerPreferences(lecturerId, i+1, preferredHours.get(i).get(j)+1);
+                    addLecturerPreferences(lecturerId, i+1, preferredHours.get(i).get(j));
                 }
             }
         }
@@ -96,6 +97,55 @@ public class InternalDB {
                 "WHERE `lecturer_id`=(?)");
         preparedStatement.setInt(1,lecturerId);
         preparedStatement.executeUpdate();
+    }
+
+    public ArrayList<Pair<Integer,Integer>> getUserPreferredHours(int userId, Boolean student) throws SQLException {
+        ArrayList<Pair<Integer,Integer>> preferredHours = new ArrayList<>();
+        PreparedStatement preparedStatement;
+
+        if (student){
+            preparedStatement = connection.prepareStatement("SELECT `day_id`, `hour_id` " +
+                    "FROM `preferred_hours_students` WHERE `user_id`=(?)");
+            preparedStatement.setInt(1, userId);
+        }else{
+            preparedStatement = connection.prepareStatement("SELECT `day_id`, `hour_id` " +
+                    "FROM `preferred_hours_lecturers` WHERE `lecturer_id`=(?)");
+            preparedStatement.setInt(1, userId);
+        }
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                preferredHours.add(new Pair<>(resultSet.getInt(1), resultSet.getInt(2)));
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+        return  preferredHours;
+    }
+
+    public ArrayList<String> getLecturerPreferredRooms(int lecturerId) throws SQLException {
+        ArrayList<String> preferredRooms = new ArrayList<>();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT `room_number` FROM " +
+                "`preferred_rooms` WHERE `lecturer_id`=(?)");
+        preparedStatement.setInt(1, lecturerId);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                preferredRooms.add(resultSet.getString(1));
+            }
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+        return  preferredRooms;
     }
 
     public Pair<Integer,Boolean> checkUserCredentials(String index, String lastname, Boolean student) throws SQLException {

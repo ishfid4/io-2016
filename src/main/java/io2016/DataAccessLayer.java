@@ -57,6 +57,14 @@ public class DataAccessLayer {
         }
     }
 
+    public ArrayList<Pair<Integer,Integer>> getPreferedHoursFromDB(int userId, Boolean student) throws SQLException {
+        return internalDB.getUserPreferredHours(userId, student);
+    }
+
+    public ArrayList<String> getPreferedRoomsFromDB(int lecturerId) throws SQLException {
+        return internalDB.getLecturerPreferredRooms(lecturerId);
+    }
+
     public void saveToJsonFile() throws IOException, SQLException {
         ArrayList<LecturerPreferences> lecturersPreferences = new ArrayList<LecturerPreferences>();
         ArrayList<GroupPreferences> groupsPreferences = new ArrayList<GroupPreferences>();
@@ -80,7 +88,7 @@ public class DataAccessLayer {
             preferedHours.add(new ArrayList<Integer>());
             for (int j = 0; j < 13; ++j){
                 if (hoursPreferences.get(i).get(index) == j){
-                    preferedHours.get(i).add(j);
+                    preferedHours.get(i).add(j+1);
                     index++;
                 }else{
                     preferedHours.get(i).add(0);

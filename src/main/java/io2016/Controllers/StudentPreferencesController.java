@@ -66,7 +66,10 @@ public class StudentPreferencesController extends PreferencesController{
         }
     }
 
-    public void setSupervisor(Supervisor supervisor) {
+    public void setSupervisor(Supervisor supervisor) throws SQLException {
         this.supervisor = supervisor;
+
+        // TODO: consider whether this should be here?
+        setUpDaysViewWithPreviousPreferedHours();
     }
 }
