@@ -18,7 +18,7 @@ public class JsonOutput {
 
     public void saveAggregatedStudentsPreferrations(ArrayList<GroupPreferences> groupsPreferences) throws IOException {
         PrintWriter printWriter = null;
-        printWriter = new PrintWriter("groupsPreferredHours.json");
+        printWriter = new PrintWriter("output/groupsPreferredHours.json");
 
         JsonFactory jfactory = new JsonFactory();
         JsonGenerator jGenerator = jfactory.createGenerator(printWriter);
@@ -55,7 +55,7 @@ public class JsonOutput {
 
     public void saveAggregatedLecturerPreferrences(ArrayList<LecturerPreferences> lecturersPreferences) throws IOException {
         PrintWriter printWriter = null;
-        printWriter = new PrintWriter("lecturersPreferredHours.json");
+        printWriter = new PrintWriter("output/lecturersPreferredHours.json");
 
         JsonFactory jfactory = new JsonFactory();
         JsonGenerator jGenerator = jfactory.createGenerator(printWriter);
@@ -93,7 +93,7 @@ public class JsonOutput {
 
     public void saveAggregatedRoomPreferrences(ArrayList<LecturerPreferences> lecturersPreferences) throws IOException {
         PrintWriter printWriter = null;
-        printWriter = new PrintWriter("roomPreferences.json");
+        printWriter = new PrintWriter("output/roomPreferences.json");
 
         JsonFactory jfactory = new JsonFactory();
         JsonGenerator jGenerator = jfactory.createGenerator(printWriter);

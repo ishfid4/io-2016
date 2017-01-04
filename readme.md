@@ -12,7 +12,8 @@
         4. Uprawnienia:
             1. Dane:
             2. Struktura
-            
+         
+####Pliki generowane przez program znajdują się w folderze "output"
 ##TODO
 1. Import wybranych wcześniej preferencji z bazy danych (ale nie wiem czy to zostanie zrealizowane -> trochę zabawy z tym by było)
 2. Jakieś sugestie?
