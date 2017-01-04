@@ -80,8 +80,9 @@ public class JsonOutput {
                 jGenerator.writeFieldName("hour_id");
                 jGenerator.writeNumber(entry.getKey().getValue());
 
-                jGenerator.writeFieldName("count");
-                jGenerator.writeNumber(entry.getValue());
+//                This is not relevant
+//                jGenerator.writeFieldName("count");
+//                jGenerator.writeNumber(entry.getValue());
 
                 jGenerator.writeEndObject();
             }
