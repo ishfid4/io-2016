@@ -45,16 +45,6 @@ public class LoginController {
             FXMLLoader loader;
             Parent root = null;
 
-            //Removing previous preferences if they exist
-            try {
-                supervisor.removePreviousUserPreferences();
-            } catch (SQLException ex) {
-                //handle errors
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-            }
-
             try {
                     if (supervisor.isStudent()){
                         loader = new FXMLLoader(getClass().getResource("/layout/studentWindow.fxml"));
@@ -73,9 +63,9 @@ public class LoginController {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
-                } catch (IOException | SQLException e) {
-                    e.printStackTrace();
-                }
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
         }else{
             Platform.runLater(() -> loginLabelStatus.setText("Niepoprawne dane logowania"));
         }

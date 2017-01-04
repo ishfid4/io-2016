@@ -13,12 +13,11 @@
             1. Dane:
             2. Struktura
             
-##W kodzie są komentarze TODO
-Jeśli zaimpirtujesz ten projekt w Intellij to na samym dole będzie sekcja TODO gdzie są wszystkie te komentarze zebrane
+##TODO
+1. Import wybranych wcześniej preferencji z bazy danych (ale nie wiem czy to zostanie zrealizowane -> trochę zabawy z tym by było)
+2. Jakieś sugestie?
 
 #####Pola logowania:
 1. "Nr. indexu": pole id z tabeli students/lecturers
 2. "Nazwisko": pole lastname z tabeli students/lecturers
 3. Jeśli logowanie na prowadzącego -> zaznaczyć pole "Prowadzący"
-
-Jeśli wpiszesz coś inndego niż liczby lub zostawisz puste pole "Nr indeksu" to będzie rzucony exception

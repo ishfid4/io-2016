@@ -23,9 +23,9 @@ public class LecturerPreferencesController extends PreferencesController {
     private ObservableList<String> roomList = FXCollections.observableArrayList();
 
     @FXML
-    private void saveClicked() throws IOException, SQLException {
-        ObservableList<String> prederedRooms = null;
-        prederedRooms = roomListView.getSelectionModel().getSelectedItems();
+    private void saveClicked() {
+        ObservableList<String> preferredRooms = null;
+        preferredRooms = roomListView.getSelectionModel().getSelectedItems();
 
         ArrayList<ObservableList<Integer>> preferredHours = new ArrayList<>();
         preferredHours.add(moListView.getSelectionModel().getSelectedIndices());
@@ -34,22 +34,46 @@ public class LecturerPreferencesController extends PreferencesController {
         preferredHours.add(thListView.getSelectionModel().getSelectedIndices());
         preferredHours.add(frListView.getSelectionModel().getSelectedIndices());
 
-        supervisor.setRoomsPreferences(prederedRooms);
+        supervisor.setRoomsPreferences(preferredRooms);
         supervisor.setHoursPreferences(preferredHours);
-        try{
-            supervisor.save();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("Poprawnie zapisano preferencje godzin oraz sal!");
+        Boolean sthSelected = false;
+        for(int i = 0; i < preferredHours.size(); ++i){
+            if (preferredHours.get(i).size() != 0){
+                sthSelected = true;
+            }
+        }
+        if (preferredRooms.size() != 0){
+            sthSelected = true;
+        }
+
+        if (sthSelected) {
+            try{
+                //Removing previous preferences if they exist and sth in list is selected
+                supervisor.removePreviousUserPreferences();
+
+                //Saving
+                supervisor.save();
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Poprawnie zapisano preferencje godzin oraz sal!");
+                alert.showAndWait();
+
+                //Disabling further edition of preferences and saving them in this session
+                saveButton.setDisable(true);
+                preferencesBox.setDisable(true);
+
+            } catch (SQLException | IOException e) {
+                errorAlert(e);
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Uwaga!");
+            alert.setHeaderText("Brak wybranych preferencji!");
+            alert.setContentText("Prosze wybrac preferowane godziny i sale!");
+
             alert.showAndWait();
-
-            //Disabling further edition of preferences and saving them in this session
-            saveButton.setDisable(true);
-            preferencesBox.setDisable(true);
-
-        } catch (SQLException | IOException e) {
-            errorAlert(e);
         }
     }
 
